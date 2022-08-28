@@ -1,0 +1,41 @@
+1. Макет платежной витрины
+a. В макете присутствуют опечатки:
+“ПОДБОР ПРЕПОДАВТЕЛЯ” в пунктах с этапами
+b. Текст с активированным промокодом  “Промокод сказочно активирован”, ниже “SBERBANK-5 → Ввести новый”:
+“сказочно” - это динамически генерируемая надпись или статический текст? Разработчик может решить, что это статический текст
+c.Страница перегружена элементами.
+d. Нет границ между блоками
+e.Макет прерывается блоком “Вы добьетесь успеха, занимаясь в Skyeng”. В этом блоке картинки не полностью отображаются
+f. В макете не выводится контент из панели слоев
+
+2. Тест-план для страницы “Interactive Exercises”, который демонстрирует проверки критичные для пользователя (порядок тестирования в соответствии с номерами)
+mind map https://mm.tt/1776880612?t=P47rLRQauu
+
+3.Ссылка на видео https://user73866.clients-cdnnow.ru/video/converted/90ebf1a8498affedf30791ef38d9926f_720p.mp4
+
+
+4.
+a. Ссылка на картинку с NASA
+https://apod.nasa.gov/apod/image/2001/BetelgeuseImagined_EsoCalcada_2662.jpg
+b. Ссылка на пост в сервисе Pastebin
+https://pastebin.com/sSH5rNzh
+c. Запрос к NASA API в виде cURL
+curl -X GET "https://api.nasa.gov/planetary/apod?api_key=a5BsMwgWnagMCpSXSoUCjk2WB8wxtX11X0JbVxaH&date=2020-01-01&hd=true"
+d. Запрос к Pastebin API в виде cURL
+curl -d 'api_paste_code='$EXPLANATION \
+     -d 'api_dev_key=dDF54M_izYRN62aeUjtYvjGwdXt2qCcI' \
+   -d 'api_paste_name=Test%20task' \
+     -d 'api_option=paste' 'https://pastebin.com/api/api_post.php'
+где $EXPLANATION добывается вот так:
+1.NASA_JSON=$(curl -X GET 'https://api.nasa.gov/planetary/apod?api_key=a5BsMwgWnagMCpSXSoUCjk2WB8wxtX11X0JbVxaH&date=2020-01-01&hd=true')
+Это мы результат выполнения команды курл кладем в переменную NASA_JSON
+2.echo $NASA_JSON | jq .explanation
+3.echo $NASA_JSON | jq .hdurl
+отправляем в стандартный вывод при помощи утилиты echo содержимое переменной NASA_JSON. А сам стандартный вывод направляем на стандартный ввод через пайп в утилиту jq
+4.EXPLANATION=$(echo $NASA_JSON | jq .explanation)
+записываем в переменную EXPLANATION значение поля из джейсона
+5.curl -d 'api_paste_code='$EXPLANATION \
+     -d 'api_dev_key=dDF54M_izYRN62aeUjtYvjGwdXt2qCcI' \
+   -d 'api_paste_name=Test%20task' \
+     -d 'api_option=paste' 'https://pastebin.com/api/api_post.php'
+публикуем текст картинки на Pastebin
